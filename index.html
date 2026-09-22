@@ -132,10 +132,12 @@ body {
 
 /* ========== LOGIN SCREEN ========== */
 .login-screen {
-  display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
+}
+.login-screen.active {
+  display: flex;
 }
 .login-card {
   background: var(--card);
@@ -2277,7 +2279,7 @@ async function submitTest() {
     sectionId: currentTestId,
     sectionTitle: section.title,
     attemptNumber: 1, // TODO: increment
-    submittedAt: new Date().toISOString(),
+    date: new Date().toISOString(),
     score: correct,
     percentage,
     timeTaken,
