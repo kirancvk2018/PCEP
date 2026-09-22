@@ -766,6 +766,230 @@ main {
   background: #c5cfe0;
 }
 
+/* ========== ADMIN DASHBOARD ========== */
+.admin-screen main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.admin-header p {
+  margin: 4px 0 0 0;
+  color: var(--muted);
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-tab-btn {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.admin-tab-btn:hover {
+  color: var(--text);
+}
+
+.admin-tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.admin-tab-content {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.admin-stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.admin-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.admin-stat-label {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.admin-heatmap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.heatmap-cell {
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  color: white;
+  transition: transform 0.2s;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.05);
+}
+
+.heatmap-cell.hot-5 { background: #d32f2f; }
+.heatmap-cell.hot-4 { background: #f57c00; }
+.heatmap-cell.hot-3 { background: #fbc02d; }
+.heatmap-cell.hot-2 { background: #7cb342; }
+.heatmap-cell.hot-1 { background: #388e3c; }
+.heatmap-cell.hot-0 { background: #1976d2; }
+.heatmap-cell.hot-empty { background: #9e9e9e; color: white; }
+
+.heatmap-cell-label {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.heatmap-cell-value {
+  font-size: 20px;
+  margin-top: 4px;
+}
+
+.participants-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.participants-table thead {
+  background: var(--bg);
+  border-bottom: 2px solid var(--border);
+}
+
+.participants-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.participants-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.participants-table tbody tr:hover {
+  background: var(--bg);
+}
+
+.participant-row-detail {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.stats-table thead {
+  background: var(--bg);
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.stats-table th {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.stats-table tbody tr:hover {
+  background: var(--bg);
+}
+
+.score-bar {
+  display: inline-block;
+  height: 24px;
+  background: linear-gradient(90deg, #d32f2f 0%, #f57c00 25%, #fbc02d 50%, #7cb342 75%, #388e3c 100%);
+  border-radius: 4px;
+  min-width: 100px;
+  position: relative;
+}
+
+.score-bar-label {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.btn-logout {
+  background: #ef5350;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-logout:hover {
+  background: #c62828;
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .topbar {
@@ -1037,6 +1261,116 @@ main {
       <button class="btn-large btn-download" onclick="downloadPDF()">📥 Download Report (PDF)</button>
       <button class="btn-large btn-retake-test" onclick="goToDashboard()">← Back to Dashboard</button>
       <button class="btn-large btn-dashboard" onclick="retakeTest()">🔄 Retake Test</button>
+    </div>
+  </main>
+</div>
+
+<!-- ADMIN DASHBOARD SCREEN -->
+<div id="adminScreen" class="screen admin-screen">
+  <main>
+    <div class="admin-header">
+      <div>
+        <h2>Admin Dashboard</h2>
+        <p>Manage participants and view analytics</p>
+      </div>
+      <button class="btn btn-logout" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" onclick="switchAdminTab('overview')">📊 Overview</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('participants')">👥 Participants</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('analytics')">📈 Analytics</button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('export')">📥 Export</button>
+    </div>
+
+    <!-- Overview Tab -->
+    <div id="overviewTab" class="admin-tab-content active">
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <div class="admin-stat-value" id="totalParticipants">0</div>
+          <div class="admin-stat-label">Total Participants</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-value" id="totalTestsTaken">0</div>
+          <div class="admin-stat-label">Tests Completed</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-value" id="averageScore">-</div>
+          <div class="admin-stat-label">Average Score</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-value" id="passRate">-</div>
+          <div class="admin-stat-label">Pass Rate (≥70%)</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-value" id="completionRate">-</div>
+          <div class="admin-stat-label">Completion Rate</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-value" id="totalAttempts">0</div>
+          <div class="admin-stat-label">Total Attempts</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 32px;">
+        <h3>Section Performance Heatmap</h3>
+        <div class="admin-heatmap" id="heatmap"></div>
+      </div>
+
+      <div style="margin-top: 32px;">
+        <h3>Recent Activity</h3>
+        <div id="recentActivity" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; max-height: 400px; overflow-y: auto;"></div>
+      </div>
+    </div>
+
+    <!-- Participants Tab -->
+    <div id="participantsTab" class="admin-tab-content" style="display: none;">
+      <div style="margin-bottom: 20px;">
+        <input type="text" id="participantSearch" placeholder="Search by name, email, or ID..." style="width: 100%; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: inherit;">
+      </div>
+      <div id="participantsList" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;"></div>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div id="analyticsTab" class="admin-tab-content" style="display: none;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+          <h3>Score Distribution</h3>
+          <div id="scoreDistribution" style="margin-top: 16px;"></div>
+        </div>
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+          <h3>Completion by Section</h3>
+          <div id="completionBySection" style="margin-top: 16px;"></div>
+        </div>
+      </div>
+      <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+        <h3>Individual Section Performance</h3>
+        <div id="sectionStats" style="margin-top: 16px;"></div>
+      </div>
+    </div>
+
+    <!-- Export Tab -->
+    <div id="exportTab" class="admin-tab-content" style="display: none;">
+      <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; max-width: 600px;">
+        <h3>Export Data</h3>
+        <p style="color: var(--muted); margin: 16px 0;">Choose what data to export as CSV file:</p>
+        
+        <div style="margin: 24px 0;">
+          <label style="display: block; margin: 12px 0; cursor: pointer;">
+            <input type="radio" name="exportType" value="participants" checked> All Participants (Name, Email, ID, Level, Registration Date)
+          </label>
+          <label style="display: block; margin: 12px 0; cursor: pointer;">
+            <input type="radio" name="exportType" value="results"> Test Results (Participant, Section, Score, Date, Attempt)
+          </label>
+          <label style="display: block; margin: 12px 0; cursor: pointer;">
+            <input type="radio" name="exportType" value="full"> Full Report (All data combined)
+          </label>
+        </div>
+
+        <button class="btn btn-primary" onclick="exportToCSV()" style="width: 100%; padding: 16px; font-size: 16px;">📥 Download CSV</button>
+        
+        <div id="exportStatus" style="margin-top: 16px; padding: 12px; background: var(--bg); border-radius: 8px; display: none;"></div>
+      </div>
     </div>
   </main>
 </div>
@@ -1327,14 +1661,17 @@ async function participantRegister() {
 
   await store.saveParticipant(participantId, participant);
   currentUser = participant;
+  
+  // IMPORTANT: Save to currentUser to localStorage so they stay logged in
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
   successEl.textContent = `✓ Registered! Welcome, ${name}. Redirecting...`;
-  setTimeout(() => {
+  setTimeout(async () => {
     document.getElementById('regName').value = '';
     document.getElementById('regEmail').value = '';
     document.getElementById('regPhone').value = '';
     document.getElementById('regTargetDate').value = '';
-    renderDashboard();
+    await renderDashboard();
     showScreen('dashboard');
   }, 1500);
 }
@@ -1354,7 +1691,11 @@ async function adminLogin() {
   if (email === 'admin@pcep.com' && password === 'admin123') {
     currentUser = { id: 'admin', role: 'admin', email };
     localStorage.setItem('authToken', JSON.stringify(currentUser));
-    alert('Admin login not yet implemented. Use participant registration to test.');
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPassword').value = '';
+    await renderAdminDashboard();
+    showScreen('admin');
     return;
   }
 
@@ -1474,6 +1815,324 @@ function logout() {
   currentUser = null;
   localStorage.clear();
   location.reload();
+}
+
+/* ================================================================
+   ADMIN DASHBOARD FUNCTIONS
+   ================================================================ */
+
+async function renderAdminDashboard() {
+  await renderAdminOverview();
+  renderAdminParticipants();
+}
+
+async function renderAdminOverview() {
+  // Get all participants
+  const participants = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('p:')) {
+      participants.push(JSON.parse(localStorage.getItem(key)));
+    }
+  }
+
+  // Get all test results
+  const allResults = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('t:')) {
+      allResults.push(JSON.parse(localStorage.getItem(key)));
+    }
+  }
+
+  // Calculate statistics
+  document.getElementById('totalParticipants').textContent = participants.length;
+  document.getElementById('totalTestsTaken').textContent = allResults.length;
+  document.getElementById('totalAttempts').textContent = allResults.length;
+
+  if (allResults.length > 0) {
+    const avgScore = Math.round(allResults.reduce((sum, r) => sum + r.percentage, 0) / allResults.length);
+    document.getElementById('averageScore').textContent = avgScore + '%';
+
+    const passCount = allResults.filter(r => r.percentage >= 70).length;
+    const passRate = Math.round((passCount / allResults.length) * 100);
+    document.getElementById('passRate').textContent = passRate + '%';
+  }
+
+  if (participants.length > 0) {
+    const completedCount = participants.filter(p => {
+      const results = allResults.filter(r => r.participantId === p.id);
+      return results.length > 0;
+    }).length;
+    const completionRate = Math.round((completedCount / participants.length) * 100);
+    document.getElementById('completionRate').textContent = completionRate + '%';
+  }
+
+  // Render heatmap
+  renderHeatmap(allResults);
+
+  // Render recent activity
+  renderRecentActivity(allResults, participants);
+}
+
+function renderHeatmap(results) {
+  const heatmapEl = document.getElementById('heatmap');
+  heatmapEl.innerHTML = '';
+
+  const bySection = {};
+  SECTIONS.forEach(s => bySection[s.id] = []);
+  results.forEach(r => bySection[r.sectionId].push(r));
+
+  SECTIONS.forEach((section, idx) => {
+    const sectionResults = bySection[section.id];
+    const avgScore = sectionResults.length > 0 ? 
+      Math.round(sectionResults.reduce((sum, r) => sum + r.percentage, 0) / sectionResults.length) : 0;
+    
+    let intensity = 'hot-empty';
+    if (sectionResults.length > 0) {
+      if (avgScore >= 80) intensity = 'hot-1';
+      else if (avgScore >= 70) intensity = 'hot-2';
+      else if (avgScore >= 60) intensity = 'hot-3';
+      else if (avgScore >= 50) intensity = 'hot-4';
+      else intensity = 'hot-5';
+    }
+
+    const cell = document.createElement('div');
+    cell.className = `heatmap-cell ${intensity}`;
+    cell.innerHTML = `
+      <div class="heatmap-cell-label">Section ${idx + 1}</div>
+      <div class="heatmap-cell-value">${avgScore}%</div>
+      <div class="heatmap-cell-label">${sectionResults.length} tests</div>
+    `;
+    heatmapEl.appendChild(cell);
+  });
+}
+
+function renderRecentActivity(results, participants) {
+  const sortedResults = [...results].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
+  const participantMap = {};
+  participants.forEach(p => participantMap[p.id] = p.name);
+
+  let html = '';
+  if (sortedResults.length === 0) {
+    html = '<p style="color: var(--muted); text-align: center; padding: 20px;">No activity yet</p>';
+  } else {
+    html = '<div class="stats-table"><table class="stats-table" style="margin: 0;"><tbody>';
+    sortedResults.forEach(r => {
+      const section = SECTIONS.find(s => s.id === r.sectionId);
+      html += `<tr>
+        <td>${participantMap[r.participantId] || 'Unknown'}</td>
+        <td>${section.title}</td>
+        <td><strong>${r.score}/30</strong> (${r.percentage}%)</td>
+        <td style="font-size: 12px; color: var(--muted);">${new Date(r.date).toLocaleDateString()}</td>
+      </tr>`;
+    });
+    html += '</tbody></table></div>';
+  }
+  document.getElementById('recentActivity').innerHTML = html;
+}
+
+function renderAdminParticipants() {
+  const participants = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('p:')) {
+      participants.push(JSON.parse(localStorage.getItem(key)));
+    }
+  }
+
+  const allResults = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('t:')) {
+      allResults.push(JSON.parse(localStorage.getItem(key)));
+    }
+  }
+
+  const searchTerm = document.getElementById('participantSearch')?.value.toLowerCase() || '';
+  const filtered = participants.filter(p => 
+    p.name.toLowerCase().includes(searchTerm) ||
+    p.email.toLowerCase().includes(searchTerm) ||
+    p.id.toLowerCase().includes(searchTerm)
+  );
+
+  let html = '<table class="participants-table"><thead><tr>';
+  html += '<th>Name</th><th>Email</th><th>Participant ID</th><th>Level</th><th>Registered</th><th>Tests</th><th>Best Score</th>';
+  html += '</tr></thead><tbody>';
+
+  filtered.forEach(p => {
+    const pResults = allResults.filter(r => r.participantId === p.id);
+    const bestResult = pResults.length > 0 ? 
+      pResults.reduce((best, r) => r.percentage > best.percentage ? r : best) : null;
+    const testCount = new Set(pResults.map(r => r.sectionId)).size;
+
+    html += `<tr>
+      <td><strong>${p.name}</strong></td>
+      <td>${p.email}</td>
+      <td style="font-family: monospace; font-size: 12px;">${p.id}</td>
+      <td>${(p.level || 'Beginner').charAt(0).toUpperCase() + (p.level || 'Beginner').slice(1)}</td>
+      <td style="font-size: 12px;">${new Date(p.createdAt).toLocaleDateString()}</td>
+      <td><strong>${testCount}/6</strong> <span style="color: var(--muted); font-size: 12px;">(${pResults.length} attempts)</span></td>
+      <td>${bestResult ? `<strong>${bestResult.percentage}%</strong> <span style="color: var(--muted); font-size: 12px;">(${bestResult.score}/30)</span>` : '-'}</td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('participantsList').innerHTML = html || '<p style="text-align: center; padding: 20px; color: var(--muted);">No participants found</p>';
+}
+
+function renderAdminAnalytics() {
+  const allResults = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('t:')) {
+      allResults.push(JSON.parse(localStorage.getItem(key)));
+    }
+  }
+
+  // Score distribution
+  let scoreHtml = '';
+  if (allResults.length > 0) {
+    const ranges = [
+      { min: 0, max: 20, label: '0-20%', count: 0 },
+      { min: 20, max: 40, label: '20-40%', count: 0 },
+      { min: 40, max: 60, label: '40-60%', count: 0 },
+      { min: 60, max: 80, label: '60-80%', count: 0 },
+      { min: 80, max: 100, label: '80-100%', count: 0 }
+    ];
+    
+    allResults.forEach(r => {
+      const range = ranges.find(rng => r.percentage >= rng.min && r.percentage <= rng.max);
+      if (range) range.count++;
+    });
+
+    scoreHtml = '<div class="stats-table"><table class="stats-table" style="margin: 0;"><tbody>';
+    ranges.forEach(r => {
+      const pct = Math.round((r.count / allResults.length) * 100);
+      scoreHtml += `<tr><td>${r.label}</td><td><div class="score-bar" style="width: ${r.count * 20}px;"><span class="score-bar-label">${r.count}</span></div></td><td>${pct}%</td></tr>`;
+    });
+    scoreHtml += '</tbody></table></div>';
+  } else {
+    scoreHtml = '<p style="color: var(--muted);">No data available</p>';
+  }
+  document.getElementById('scoreDistribution').innerHTML = scoreHtml;
+
+  // Completion by section
+  let completionHtml = '<div class="stats-table"><table class="stats-table" style="margin: 0;"><tbody>';
+  const bySection = {};
+  SECTIONS.forEach(s => bySection[s.id] = 0);
+  allResults.forEach(r => bySection[r.sectionId]++);
+
+  SECTIONS.forEach((s, idx) => {
+    completionHtml += `<tr><td>Section ${idx + 1}: ${s.title}</td><td><strong>${bySection[s.id]}</strong> tests</td></tr>`;
+  });
+  completionHtml += '</tbody></table></div>';
+  document.getElementById('completionBySection').innerHTML = completionHtml;
+
+  // Section stats
+  let statsHtml = '<div class="stats-table"><table class="stats-table" style="margin: 0;"><tbody>';
+  SECTIONS.forEach((s, idx) => {
+    const sectionResults = allResults.filter(r => r.sectionId === s.id);
+    const avg = sectionResults.length > 0 ? Math.round(sectionResults.reduce((sum, r) => sum + r.percentage, 0) / sectionResults.length) : 0;
+    const passCount = sectionResults.filter(r => r.percentage >= 70).length;
+    statsHtml += `<tr><td>Section ${idx + 1}: ${s.title}</td><td>Avg: <strong>${avg}%</strong></td><td>Pass: <strong>${passCount}/${sectionResults.length}</strong></td></tr>`;
+  });
+  statsHtml += '</tbody></table></div>';
+  document.getElementById('sectionStats').innerHTML = statsHtml;
+}
+
+function switchAdminTab(tab) {
+  document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
+  
+  document.getElementById(tab + 'Tab').style.display = 'block';
+  event.target.classList.add('active');
+
+  if (tab === 'participants') {
+    document.getElementById('participantSearch').addEventListener('input', renderAdminParticipants);
+    renderAdminParticipants();
+  } else if (tab === 'analytics') {
+    renderAdminAnalytics();
+  }
+}
+
+function exportToCSV() {
+  const exportType = document.querySelector('input[name="exportType"]:checked').value;
+  const statusEl = document.getElementById('exportStatus');
+  statusEl.style.display = 'block';
+  statusEl.textContent = '📥 Preparing export...';
+
+  const participants = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('p:')) {
+      participants.push(JSON.parse(localStorage.getItem(key)));
+    }
+  }
+
+  const allResults = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('t:')) {
+      allResults.push(JSON.parse(localStorage.getItem(key)));
+    }
+  }
+
+  let csv = '';
+  let filename = 'pcep-export';
+
+  if (exportType === 'participants') {
+    csv = 'Name,Email,Participant ID,Level,Registered Date\n';
+    participants.forEach(p => {
+      csv += `"${p.name}","${p.email}","${p.id}","${p.level || 'Beginner'}","${new Date(p.createdAt).toLocaleDateString()}"\n`;
+    });
+    filename += '-participants.csv';
+  } else if (exportType === 'results') {
+    csv = 'Participant Name,Section,Score,Percentage,Date,Attempt\n';
+    const pMap = {};
+    participants.forEach(p => pMap[p.id] = p.name);
+    allResults.forEach(r => {
+      const section = SECTIONS.find(s => s.id === r.sectionId);
+      csv += `"${pMap[r.participantId] || 'Unknown'}","${section.title}","${r.score}/30","${r.percentage}%","${new Date(r.date).toLocaleDateString()}","${r.attemptNumber}"\n`;
+    });
+    filename += '-results.csv';
+  } else if (exportType === 'full') {
+    csv = 'Report Type,Data\n';
+    csv += `"Export Date","${new Date().toLocaleString()}"\n`;
+    csv += `"Total Participants","${participants.length}"\n`;
+    csv += `"Total Tests Taken","${allResults.length}"\n`;
+    if (allResults.length > 0) {
+      const avgScore = Math.round(allResults.reduce((sum, r) => sum + r.percentage, 0) / allResults.length);
+      csv += `"Average Score","${avgScore}%"\n`;
+    }
+    csv += '\n\nParticipant Details\n';
+    csv += 'Name,Email,Participant ID,Level,Registered Date,Tests Completed,Best Score\n';
+    const pMap = {};
+    participants.forEach(p => pMap[p.id] = p.name);
+    participants.forEach(p => {
+      const pResults = allResults.filter(r => r.participantId === p.id);
+      const testCount = new Set(pResults.map(r => r.sectionId)).size;
+      const best = pResults.length > 0 ? Math.max(...pResults.map(r => r.percentage)) : 0;
+      csv += `"${p.name}","${p.email}","${p.id}","${p.level || 'Beginner'}","${new Date(p.createdAt).toLocaleDateString()}","${testCount}","${best}%"\n`;
+    });
+    filename += '-full-report.csv';
+  }
+
+  // Create and download CSV
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+
+  statusEl.textContent = `✅ Downloaded: ${filename}`;
+  setTimeout(() => {
+    statusEl.style.display = 'none';
+  }, 3000);
 }
 
 /* ================================================================
@@ -1679,8 +2338,8 @@ function downloadPDF() {
   alert('PDF download coming in Phase 1.5');
 }
 
-function goToDashboard() {
-  renderDashboard();
+async function goToDashboard() {
+  await renderDashboard();
   showScreen('dashboard');
 }
 
@@ -1704,13 +2363,18 @@ async function reviewTest(sectionId) {
    INITIALIZATION
    ================================================================ */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Check if returning user
   const savedUser = localStorage.getItem('currentUser');
   if (savedUser) {
     currentUser = JSON.parse(savedUser);
-    renderDashboard();
-    showScreen('dashboard');
+    if (currentUser.role === 'admin') {
+      await renderAdminDashboard();
+      showScreen('admin');
+    } else {
+      await renderDashboard();
+      showScreen('dashboard');
+    }
   } else {
     showScreen('login');
   }
