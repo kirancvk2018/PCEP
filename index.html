@@ -2358,89 +2358,101 @@ function displayResults(result) {
 }
 
 function downloadPDF() {
-  if (typeof jsPDF === 'undefined' || !currentTestId) {
-    alert('PDF download not available. Please ensure jsPDF is loaded.');
+  // FIX: Access jsPDF correctly from the window object
+  // UMD version loads as window.jspdf.jsPDF
+  const jsPDFLib = window.jspdf?.jsPDF || window.jsPDF;
+  
+  if (!jsPDFLib || !currentTestId) {
+    alert('PDF library is loading. Please wait a moment and try again.');
     return;
   }
 
-  const section = SECTIONS.find(s => s.id === currentTestId);
-  const doc = new jsPDF();
-  const pageHeight = doc.internal.pageSize.getHeight();
-  let yPos = 10;
+  try {
+    const section = SECTIONS.find(s => s.id === currentTestId);
+    const doc = new jsPDFLib();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let yPos = 10;
 
-  // Title
-  doc.setFontSize(18);
-  doc.text('PCEP Test Report', 10, yPos);
-  yPos += 10;
+    // Title
+    doc.setFontSize(18);
+    doc.text('PCEP Test Report', 10, yPos);
+    yPos += 10;
 
-  // Get current test results from localStorage
-  let testResults = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key.startsWith(`t:${currentTestId}:${currentUser.id}:`)) {
-      testResults.push(JSON.parse(localStorage.getItem(key)));
-    }
-  }
-
-  if (testResults.length === 0) {
-    alert('No test results found to download.');
-    return;
-  }
-
-  const result = testResults[testResults.length - 1]; // Latest attempt
-
-  // Section info
-  doc.setFontSize(12);
-  doc.text(`Section: ${section.title}`, 10, yPos);
-  yPos += 8;
-  doc.text(`Participant: ${currentUser.name}`, 10, yPos);
-  yPos += 8;
-  doc.text(`Date: ${new Date(result.date).toLocaleDateString()}`, 10, yPos);
-  yPos += 10;
-
-  // Score summary
-  doc.setFontSize(14);
-  doc.text('Score Summary', 10, yPos);
-  yPos += 8;
-  doc.setFontSize(11);
-  doc.text(`Total Score: ${result.score}/30 (${result.percentage}%)`, 10, yPos);
-  yPos += 6;
-  doc.text(`Status: ${result.isPassed ? '✓ PASSED' : '✗ NOT PASSED'}`, 10, yPos);
-  yPos += 6;
-  doc.text(`Time Taken: ${Math.floor(result.timeTaken / 60)}:${String(result.timeTaken % 60).padStart(2, '0')}`, 10, yPos);
-  yPos += 12;
-
-  // Answer review
-  doc.setFontSize(12);
-  doc.text('Answer Review', 10, yPos);
-  yPos += 8;
-
-  result.responses.forEach((r, idx) => {
-    if (yPos > pageHeight - 20) {
-      doc.addPage();
-      yPos = 10;
+    // Get current test results from localStorage
+    let testResults = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.startsWith(`t:${currentTestId}:${currentUser.id}:`)) {
+        testResults.push(JSON.parse(localStorage.getItem(key)));
+      }
     }
 
-    doc.setFontSize(10);
-    doc.setTextColor(0);
-    doc.text(`Q${idx + 1}: ${r.isCorrect ? '✓' : '✗'}`, 10, yPos);
-    yPos += 5;
-
-    doc.setFontSize(9);
-    doc.text(`Your answer: ${r.userAnswer}`, 15, yPos);
-    yPos += 4;
-
-    if (!r.isCorrect) {
-      doc.text(`Correct answer: ${r.correctAnswer}`, 15, yPos);
-      yPos += 4;
+    if (testResults.length === 0) {
+      alert('No test results found to download.');
+      return;
     }
 
-    doc.text(`Topic: ${r.topic}`, 15, yPos);
+    const result = testResults[testResults.length - 1]; // Latest attempt
+
+    // Section info
+    doc.setFontSize(12);
+    doc.text(`Section: ${section.title}`, 10, yPos);
+    yPos += 8;
+    doc.text(`Participant: ${currentUser.name}`, 10, yPos);
+    yPos += 8;
+    doc.text(`Date: ${new Date(result.date).toLocaleDateString()}`, 10, yPos);
+    yPos += 10;
+
+    // Score summary
+    doc.setFontSize(14);
+    doc.text('Score Summary', 10, yPos);
+    yPos += 8;
+    doc.setFontSize(11);
+    doc.text(`Total Score: ${result.score}/30 (${result.percentage}%)`, 10, yPos);
     yPos += 6;
-  });
+    doc.text(`Status: ${result.isPassed ? '✓ PASSED' : '✗ NOT PASSED'}`, 10, yPos);
+    yPos += 6;
+    doc.text(`Time Taken: ${Math.floor(result.timeTaken / 60)}:${String(result.timeTaken % 60).padStart(2, '0')}`, 10, yPos);
+    yPos += 12;
 
-  // Download
-  doc.save(`PCEP_${section.id}_${currentUser.name}_${new Date().toISOString().split('T')[0]}.pdf`);
+    // Answer review
+    doc.setFontSize(12);
+    doc.text('Answer Review', 10, yPos);
+    yPos += 8;
+
+    result.responses.forEach((r, idx) => {
+      if (yPos > pageHeight - 20) {
+        doc.addPage();
+        yPos = 10;
+      }
+
+      doc.setFontSize(10);
+      doc.setTextColor(0);
+      doc.text(`Q${idx + 1}: ${r.isCorrect ? '✓' : '✗'}`, 10, yPos);
+      yPos += 5;
+
+      doc.setFontSize(9);
+      doc.text(`Your answer: ${r.userAnswer}`, 15, yPos);
+      yPos += 4;
+
+      if (!r.isCorrect) {
+        doc.text(`Correct answer: ${r.correctAnswer}`, 15, yPos);
+        yPos += 4;
+      }
+
+      doc.text(`Topic: ${r.topic}`, 15, yPos);
+      yPos += 6;
+    });
+
+    // Download
+    const filename = `PCEP_${section.id}_${currentUser.name}_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(filename);
+    
+    console.log('PDF downloaded successfully:', filename);
+  } catch (error) {
+    console.error('PDF generation error:', error);
+    alert('Error generating PDF. Please check browser console for details.');
+  }
 }
 
 async function goToDashboard() {
