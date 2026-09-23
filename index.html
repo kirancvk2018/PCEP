@@ -2253,9 +2253,14 @@ async function submitTest() {
 
   let correct = 0;
   const responses = [];
+  
   sectionQuestions.forEach((q, idx) => {
     const userAnswer = testResponses[idx];
-    const isCorrect = userAnswer === q.a;
+    // FIX: Ensure both are numbers for correct comparison
+    const userAnswerNum = userAnswer !== undefined ? parseInt(userAnswer) : -1;
+    const correctAnswerNum = parseInt(q.a);
+    const isCorrect = userAnswerNum === correctAnswerNum;
+    
     if (isCorrect) correct++;
 
     responses.push({
@@ -2287,6 +2292,14 @@ async function submitTest() {
     responses
   };
 
+  // FIX: Verify score matches response count before saving
+  const responseCorrectCount = responses.filter(r => r.isCorrect).length;
+  if (responseCorrectCount !== correct) {
+    console.warn(`Score mismatch detected! Score: ${correct}, Correct responses: ${responseCorrectCount}`);
+    result.score = responseCorrectCount; // Use verified count
+    result.percentage = Math.round((responseCorrectCount / sectionQuestions.length) * 100);
+  }
+
   await store.saveTestResult(currentTestId, result);
 
   displayResults(result);
@@ -2296,16 +2309,24 @@ function displayResults(result) {
   const section = SECTIONS.find(s => s.id === result.sectionId);
   const sectionIndex = SECTIONS.indexOf(section);
 
+  // FIX: Verify score matches actual responses count
+  const actualCorrect = result.responses.filter(r => r.isCorrect).length;
+  const actualIncorrect = result.responses.length - actualCorrect;
+  
+  // Use verified counts if mismatch exists
+  const displayScore = actualCorrect;
+  const displayIncorrect = actualIncorrect;
+
   document.getElementById('resultStatus').textContent = result.isPassed ? '✓' : '✗';
   document.getElementById('resultTitle').textContent = `Test Complete!`;
   document.getElementById('resultSubtitle').textContent = result.isPassed ? 'Great job! You passed this section.' : 'You can retake this test to improve your score.';
-  document.getElementById('scoreBig').textContent = `${result.score}/30`;
+  document.getElementById('scoreBig').textContent = `${displayScore}/30`;
   document.getElementById('scoreMessage').textContent = result.isPassed ? `✓ Passed! You've mastered this section.` : `Aim for 70% next time. Keep practicing!`;
   document.getElementById('scoreMessage').classList.remove('fail');
   if (!result.isPassed) document.getElementById('scoreMessage').classList.add('fail');
 
-  document.getElementById('statCorrect').textContent = result.score;
-  document.getElementById('statIncorrect').textContent = 30 - result.score;
+  document.getElementById('statCorrect').textContent = displayScore;
+  document.getElementById('statIncorrect').textContent = displayIncorrect;
   document.getElementById('statPercentage').textContent = `${result.percentage}%`;
   const mins = Math.floor(result.timeTaken / 60);
   const secs = result.timeTaken % 60;
@@ -2337,7 +2358,89 @@ function displayResults(result) {
 }
 
 function downloadPDF() {
-  alert('PDF download coming in Phase 1.5');
+  if (typeof jsPDF === 'undefined' || !currentTestId) {
+    alert('PDF download not available. Please ensure jsPDF is loaded.');
+    return;
+  }
+
+  const section = SECTIONS.find(s => s.id === currentTestId);
+  const doc = new jsPDF();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  let yPos = 10;
+
+  // Title
+  doc.setFontSize(18);
+  doc.text('PCEP Test Report', 10, yPos);
+  yPos += 10;
+
+  // Get current test results from localStorage
+  let testResults = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith(`t:${currentTestId}:${currentUser.id}:`)) {
+      testResults.push(JSON.parse(localStorage.getItem(key)));
+    }
+  }
+
+  if (testResults.length === 0) {
+    alert('No test results found to download.');
+    return;
+  }
+
+  const result = testResults[testResults.length - 1]; // Latest attempt
+
+  // Section info
+  doc.setFontSize(12);
+  doc.text(`Section: ${section.title}`, 10, yPos);
+  yPos += 8;
+  doc.text(`Participant: ${currentUser.name}`, 10, yPos);
+  yPos += 8;
+  doc.text(`Date: ${new Date(result.date).toLocaleDateString()}`, 10, yPos);
+  yPos += 10;
+
+  // Score summary
+  doc.setFontSize(14);
+  doc.text('Score Summary', 10, yPos);
+  yPos += 8;
+  doc.setFontSize(11);
+  doc.text(`Total Score: ${result.score}/30 (${result.percentage}%)`, 10, yPos);
+  yPos += 6;
+  doc.text(`Status: ${result.isPassed ? '✓ PASSED' : '✗ NOT PASSED'}`, 10, yPos);
+  yPos += 6;
+  doc.text(`Time Taken: ${Math.floor(result.timeTaken / 60)}:${String(result.timeTaken % 60).padStart(2, '0')}`, 10, yPos);
+  yPos += 12;
+
+  // Answer review
+  doc.setFontSize(12);
+  doc.text('Answer Review', 10, yPos);
+  yPos += 8;
+
+  result.responses.forEach((r, idx) => {
+    if (yPos > pageHeight - 20) {
+      doc.addPage();
+      yPos = 10;
+    }
+
+    doc.setFontSize(10);
+    doc.setTextColor(0);
+    doc.text(`Q${idx + 1}: ${r.isCorrect ? '✓' : '✗'}`, 10, yPos);
+    yPos += 5;
+
+    doc.setFontSize(9);
+    doc.text(`Your answer: ${r.userAnswer}`, 15, yPos);
+    yPos += 4;
+
+    if (!r.isCorrect) {
+      doc.text(`Correct answer: ${r.correctAnswer}`, 15, yPos);
+      yPos += 4;
+    }
+
+    doc.text(`Topic: ${r.topic}`, 15, yPos);
+    yPos += 6;
+  });
+
+  // Download
+  doc.save(`PCEP_${section.id}_${currentUser.name}_${new Date().toISOString().split('T')[0]}.pdf`);
 }
 
 async function goToDashboard() {
